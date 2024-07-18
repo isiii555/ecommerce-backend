@@ -24,6 +24,10 @@ const userSchema = mongoose.Schema({
     default: "user",
     enum: ["admin", "user"],
   },
+  basket: [{
+    type : mongoose.Types.ObjectId,
+    ref : "Product"
+  }]
 });
 
 const User = mongoose.model("User", userSchema);

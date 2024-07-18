@@ -4,10 +4,21 @@ const isAdmin = require("../middlewares/isAdmin");
 const Product = require("../models/product");
 const route = express.Router();
 
-route.get("/", authenticateAccessToken, isAdmin, async (req, res) => {
+route.get("/", authenticateAccessToken, async (req, res) => {
   try {
-    const products = await Product.find();
-    res.json(products);
+    const { page = 1, limit = 10 } = req.query;
+
+    const skipCount = (page - 1) * limit;
+
+    const products = await Product.find().limit(limit).skip(skipCount);
+
+    const count = await Product.countDocuments();
+
+    res.status(200).json({
+      products,
+      totalPages : Math.ceil(count / limit),
+      currentPage : page
+    });
   } catch (err) {
     res.status(500).json(err);
   }

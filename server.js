@@ -4,6 +4,7 @@ const userRoutes = require("./routes/userRoutes");
 const orderRoutes = require("./routes/orderRoutes");
 const productRoutes = require("./routes/productRoutes");
 const authRoutes = require("./routes/authRoutes");
+const basketRoutes = require("./routes/basketRoutes");
 require("dotenv").config();
 
 const app = express();
@@ -25,6 +26,7 @@ app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/products", productRoutes);
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/orders", orderRoutes);
+app.use("/api/v1/basket", basketRoutes);
 
 app.listen(port, () => {
   console.log(`Server started listening @ port ${port}`);
