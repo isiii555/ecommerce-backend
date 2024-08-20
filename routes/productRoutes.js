@@ -6,11 +6,15 @@ const route = express.Router();
 
 route.get("/", authenticateAccessToken, async (req, res) => {
   try {
-    const { page = 1, limit = 10 } = req.query;
+    const { page = 1, limit = 10, search = ""} = req.query;
 
     const skipCount = (page - 1) * limit;
 
-    const products = await Product.find().limit(limit).skip(skipCount);
+    const searchCriteria = search
+      ? { name: new RegExp(search, "i") }
+      : {};
+
+    const products = await Product.find(searchCriteria).limit(limit).skip(skipCount);
 
     const count = await Product.countDocuments();
 
@@ -23,6 +27,8 @@ route.get("/", authenticateAccessToken, async (req, res) => {
     res.status(500).json(err);
   }
 });
+
+
 
 route.get("/:productId", authenticateAccessToken, async (req, res) => {
   try {
